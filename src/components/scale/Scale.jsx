@@ -1,13 +1,11 @@
-import { useState } from "react";
+import pawCalculator from "../../js/scale";
+import { findAverage } from "../../js/utils";
 import { PointerStyled, ScaleStyled } from "./styles";
 
-const Scale = () => {
-  // Scale needs to be a range
-  // gradient background - green to red
-  // arrow to show 'danger' level
-  // scale based on paw temp
+const Scale = ({ temperature, measurement }) => {
+  const tempAverage = findAverage(temperature);
 
-  const [offset, setOffset] = useState(50);
+  const offset = pawCalculator(tempAverage, measurement);
 
   return (
     <ScaleStyled>

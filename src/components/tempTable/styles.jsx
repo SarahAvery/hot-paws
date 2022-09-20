@@ -1,14 +1,29 @@
 import styled from "styled-components";
 
-const TempRowStyled = styled.div`
-  border-top: 1px solid black;
+const TempContainerStyled = styled.div`
+  width: 100%;
   border-bottom: 1px solid black;
   display: flex;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  /* background-color: #f7f7f7; */
+
+  h2 {
+    width: 100%;
+    text-align: center;
+    padding-bottom: 10px;
+  }
+`;
+
+const TempRowStyled = styled.div`
+  width: 50%;
+  display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding: 10px 0;
 
   &:last-child {
-    border-top: none;
+    border-left: 1px solid darkgray;
 
     .img-container {
       background-image: url(/img/cloudy.png);
@@ -22,13 +37,12 @@ const TempRowStyled = styled.div`
     background-size: contain;
     width: 33%;
     height: 30px;
-
-    /* margin: 8px auto; */
   }
 
   div {
     margin: 5px;
+    font-weight: bold;
   }
 `;
 
-export default TempRowStyled;
+export { TempRowStyled, TempContainerStyled };

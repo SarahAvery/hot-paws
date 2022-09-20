@@ -1,34 +1,32 @@
-import { CalculatorStyled, TempContainer } from "./styles";
-
+import { CalculatorStyled } from "./styles";
 import { useState } from "react";
-import { asphaltTemp, pavementTemp } from "../../js/calculator";
-import TempRow from "../tempTable/TempTable";
-import Scale from "../scale/Scale";
+import { asphaltTemp, concreteTemp } from "../../js/calculator";
+import { TempContainer } from "../tempTable/TempContainer";
+import AnimateHeight from "react-animate-height";
 
 const numOnly = new RegExp(/^[0-9]+$/);
 
 const Calculator = () => {
-  // C of F
   const [measurement, setMeasurement] = useState("C");
-  // Error
   const [error, setError] = useState("");
-  // number value
   const [value, setValue] = useState();
-  // Array of temps
-  const [pavTemperature, setPavTemperature] = useState([]);
+  const [concreteTemperature, setConcreteTemperature] = useState([]);
   const [asphaltTemperature, setAsphaltTemperature] = useState([]);
-  // Submit disable
   const [submit, setSubmit] = useState(true);
-  // Current temp - on submit
   const [currTemp, setCurrTemp] = useState([0, "C"]);
+  const [height, setHeight] = useState(0);
+
+  const duration = 300;
 
   const onTempChange = (e) => {
     setMeasurement(e);
     validate(String(value), e);
+
+    console.log(e);
   };
 
   const onValueChange = (e) => {
-    const newValue = e.target.value;
+    const newValue = e;
     validate(newValue, measurement);
     setValue(Number(newValue));
   };
@@ -42,11 +40,11 @@ const Calculator = () => {
     if (numOnly.test(value)) {
       const num = Number(value);
 
-      if (temp === "C" && (num < 15) | (num > 45)) {
-        setError("Must be between 15°C and 45°C");
+      if (temp === "C" && (num < 15) | (num > 40)) {
+        setError("Must be between 15°C and 40°C");
         setSubmit(true);
-      } else if (temp === "F" && (num < 45) | (num > 100)) {
-        setError("Must be between 45°F and 100°F");
+      } else if (temp === "F" && (num < 60) | (num > 100)) {
+        setError("Must be between 60°F and 100°F");
         setSubmit(true);
       } else {
         passed();
@@ -56,58 +54,76 @@ const Calculator = () => {
 
   const onSubmitEvent = (e) => {
     e.preventDefault();
-    setPavTemperature(pavementTemp(value, measurement));
+    setConcreteTemperature(concreteTemp(value, measurement));
     setAsphaltTemperature(asphaltTemp(value, measurement));
     setCurrTemp([value, measurement]);
+    setHeight("auto");
   };
 
   return (
     <div className="flex-center">
-      <CalculatorStyled>
-        <h1>App Title</h1>
-        <div className="input-container">
-          <label htmlFor="temperture">Air Temperature:</label>
-          <input type="number" name="temperture" id="temperture" onChange={(e) => onValueChange(e)} required />
-          <label htmlFor="measurement"></label>
-          <select name="measurement" id="measurement" onChange={(e) => onTempChange(e.target.value)}>
-            <option value="C" defaultValue={"C"}>
-              Celsius
-            </option>
-            <option value="F">Fahrenheit</option>
-          </select>
-          <div className="error-msg">{error && `${error}`}</div>
-        </div>
+      <div className="border">
+        <CalculatorStyled>
+          <h1>Hot Paws</h1>
+          <div className="input-container">
+            <div className="error-msg">{error && `${error}`}</div>
 
-        <div className="submit-container">
-          <button type="submit" onClick={(e) => onSubmitEvent(e)} disabled={submit}>
-            Calculate
-          </button>
-        </div>
-        {/*  */}
-        <div>
-          Current Temp {currTemp[0]}&deg;{currTemp[1]}
-        </div>
-        {/*  */}
-        <Scale></Scale>
-        <div className="temp-container">
-          {pavTemperature.length > 0 && (
-            <TempContainer>
-              <h2>Sidewalk</h2>
-              {pavTemperature.map((temp) => {
-                return <TempRow temp={[temp]} measurement={currTemp[1]} key={[temp[1]]} />;
-              })}
-            </TempContainer>
-          )}
-          {asphaltTemperature.length > 0 && (
-            <TempContainer>
-              <h2>Asphalt</h2>
-              {asphaltTemperature.map((temp) => {
-                return <TempRow temp={[temp]} measurement={currTemp[1]} key={[temp[1]]} />;
-              })}
-            </TempContainer>
-          )}
-        </div>
-      </CalculatorStyled>
+            <label htmlFor="temperture">Air Temperature:</label>
+            <input
+              type="number"
+              name="temperture"
+              id="temperture"
+              onChange={(e) => onValueChange(e.target.value)}
+              required
+            />
+            <label htmlFor="measurement"></label>
+            <nav>
+              <ul className="dropdown" name="measurement" id="measurement">
+                <li className="selected">
+                  <div>
+                    <span className="deg">&deg;{measurement}</span>
+                    <span className="arrow-down"></span>
+                  </div>
+                  <ul>
+                    <li value="C" onClick={() => onTempChange("C")}>
+                      Celsius (&deg;C)
+                    </li>
+                    <li value="F" onClick={() => onTempChange("F")}>
+                      Fahrenheit (&deg;F)
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+
+          <div className="submit-container">
+            <button type="submit" onClick={(e) => onSubmitEvent(e)} disabled={submit} aria-expanded={height !== 0}>
+              Calculate
+            </button>
+          </div>
+          <div className="current-temp">
+            Current Temp:
+            <span>
+              {currTemp[0]}&deg;{currTemp[1]}
+            </span>
+          </div>
+          <div className="temp-container">
+            <AnimateHeight className="containers" duration={duration} height={height}>
+              {concreteTemperature.length > 0 && (
+                <TempContainer title="Sidewalk" temperature={concreteTemperature} measurement={currTemp[1]} />
+              )}
+            </AnimateHeight>
+            <div className="img-break" />
+            <AnimateHeight className="containers" duration={duration} height={height}>
+              {asphaltTemperature.length > 0 && (
+                <TempContainer title="Asphalt" temperature={asphaltTemperature} measurement={currTemp[1]} />
+              )}
+            </AnimateHeight>
+          </div>
+          <div>Disclaimers Here</div>
+        </CalculatorStyled>
+      </div>
     </div>
   );
 };

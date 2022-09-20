@@ -1,56 +1,35 @@
-const ferToCel = (f) => {
-  // 50f = 10c
-  const equation = Math.floor(((f - 32) * (5 / 9) * 100) / 100);
-  return equation;
-};
+import { celToFer, ferToCel } from "./utils";
 
-const celToFer = (c) => {
-  // 30c = 86f
-  const equation = (Math.floor(c * 1.8 + 32) * 100) / 100;
-  return equation;
-};
-
-const pavementTemp = (value, measurement) => {
+const concreteTemp = (value, measurement) => {
   const temp = Number(value);
 
   if (measurement === "C") {
     const cTemp = celToFer(temp);
-    const temps = calcF(cTemp);
+    const temps = tempInF(cTemp);
 
     return temps;
   } else {
-    const temps = calcF(temp);
+    const temps = tempInF(temp);
     return temps;
   }
 
-  function calcF(value) {
-    const temp = value;
+  // Calculates the sun and shade temperatures in F
+  function tempInF(value) {
+    // y = AB^x
+    // correlation coefficient R2 = 0.9962748692 (Closer R2 is to 1, the more accurate the model is)
+    const a = 20.05308883;
+    const b = 1.02022378;
 
-    let sunny = (temp * temp) / 67;
-    let cloudy = (temp * temp) / 87;
+    const sunnyTemp = Math.ceil(a * b ** value);
+    const shadeTemp = Math.ceil(sunnyTemp - 7.5);
 
-    let sunnyDiff = sunny - temp;
-    let cloudyDiff = cloudy - temp;
+    const tempArr = [["Sun"], ["Shade"]];
 
-    sunnyDiff < 20 && (sunnyDiff = 20);
-    sunnyDiff > 60 && (sunnyDiff = 60);
-    cloudyDiff < 10 && (cloudyDiff = 10);
-    cloudyDiff > 60 && (cloudyDiff = 60);
+    measurement === "C"
+      ? tempArr[0].push(ferToCel(sunnyTemp)) && tempArr[1].push(ferToCel(shadeTemp))
+      : tempArr[0].push(sunnyTemp) && tempArr[1].push(shadeTemp);
 
-    let sunnyTemp = (temp + sunnyDiff).toFixed(0);
-    let cloudyTemp = (temp + cloudyDiff).toFixed(0);
-
-    if (measurement === "C") {
-      sunnyTemp = ferToCel(sunnyTemp);
-      cloudyTemp = ferToCel(cloudyTemp);
-    }
-
-    const temps = [
-      ["Sunny", sunnyTemp],
-      ["Cloudy", cloudyTemp]
-    ];
-
-    return temps;
+    return tempArr;
   }
 };
 
@@ -58,51 +37,32 @@ const asphaltTemp = (value, measurement) => {
   const temp = Number(value);
 
   if (measurement === "C") {
-    const cTemp = celToFer(temp);
-    const temps = calcF(cTemp);
+    const temps = tempInF(celToFer(temp));
 
     return temps;
   } else {
-    const temps = calcF(temp);
-
+    const temps = tempInF(temp);
     return temps;
   }
 
-  function calcF(value) {
-    const temp = value;
+  // Calculates the sun and shade temperatures in F
+  function tempInF(value) {
+    // y = AB^x
+    // correlation coefficient R2 = 0.99963223 (Closer R2 is to 1, the more accurate the model is)
+    const a = 20.8455962;
+    const b = 1.021498494;
 
-    let sunny = (temp * temp) / 67;
-    let cloudy = (temp * temp) / 87;
+    const sunnyTemp = Math.ceil(a * b ** value);
+    const shadeTemp = Math.ceil(sunnyTemp - 8.5);
 
-    let sunnyDiff = sunny - temp;
-    let cloudyDiff = cloudy - temp;
+    const tempArr = [["Sun"], ["Shade"]];
 
-    //  87 25.9 0 = 143 123
-    sunnyDiff > 25 && (sunnyDiff = 57);
-    cloudyDiff >= 0 && (cloudyDiff = 41);
+    measurement === "C"
+      ? tempArr[0].push(ferToCel(sunnyTemp)) && tempArr[1].push(ferToCel(shadeTemp))
+      : tempArr[0].push(sunnyTemp) && tempArr[1].push(shadeTemp);
 
-    // 86 24 -0.9 = 135 115
-    sunnyDiff < 25 && (sunnyDiff = 49);
-
-    //   77 11 -8 = 125  105
-    sunnyDiff < 12 && (sunnyDiff = 48);
-    cloudyDiff < 0 && (cloudyDiff = 29);
-
-    let sunnyTemp = (temp + sunnyDiff).toFixed(0);
-    let cloudyTemp = (temp + cloudyDiff).toFixed(0);
-
-    if (measurement === "C") {
-      sunnyTemp = ferToCel(sunnyTemp);
-      cloudyTemp = ferToCel(cloudyTemp);
-    }
-
-    const temps = [
-      ["Sunny", sunnyTemp],
-      ["Cloudy", cloudyTemp]
-    ];
-
-    return temps;
+    return tempArr;
   }
 };
 
-export { ferToCel, celToFer, pavementTemp, asphaltTemp };
+export { concreteTemp, asphaltTemp };
