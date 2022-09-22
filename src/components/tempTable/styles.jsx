@@ -2,11 +2,8 @@ import styled from "styled-components";
 
 const TempContainerStyled = styled.div`
   width: 100%;
-  border-bottom: 1px solid black;
   display: flex;
   flex-wrap: wrap;
-  padding-top: 10px;
-  /* background-color: #f7f7f7; */
 
   h2 {
     width: 100%;
@@ -23,7 +20,7 @@ const TempRowStyled = styled.div`
   padding: 10px 0;
 
   &:last-child {
-    border-left: 1px solid darkgray;
+    border-left: 1px solid #a9a9a9;
 
     .img-container {
       background-image: url(/img/cloudy.png);
