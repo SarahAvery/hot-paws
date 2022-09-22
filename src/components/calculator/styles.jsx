@@ -1,32 +1,91 @@
 import styled from "styled-components";
 
 const CalculatorStyled = styled.div`
-  width: 500px;
-  min-height: 500px;
-  border: 1px solid black;
-  border-radius: 10px;
-  background: rgb(215, 232, 235);
-  background: linear-gradient(
-    150deg,
-    rgba(215, 232, 235, 1) 0%,
-    rgba(245, 245, 245, 1) 35%,
-    rgba(251, 251, 251, 1) 100%
-  );
+  width: 100%;
+  min-height: calc(100vh - 50px);
+  min-height: 80vh;
+  display: flex;
+  flex-wrap: wrap;
 
-  .input-container {
-    /* border-top: 1px solid black; */
+  section {
+    padding: 20px;
+  }
+
+  .left-section {
+    background: #1d1d1d;
+    color: var(--white);
+    border-top-left-radius: 10px;
+    width: 45%;
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .right-section {
+    background-color: var(--white);
+    color: #000000;
+    border-top-right-radius: 10px;
+    width: 55%;
+    min-height: 500px;
+  }
+
+  .bottom-section {
+    font-size: 14px;
+    background: #4f4f4f;
+    color: var(--white);
+    width: 100%;
+    border-radius: 0 0 10px 10px;
+  }
+
+  h1 {
+    padding: 5px;
+    display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 0;
+    &::after {
+      position: absolute;
+      content: "";
+      width: 220px;
+      border-bottom: 1.5px solid var(--white);
+      height: calc(2rem + 5px);
+    }
+  }
+
+  .intro {
+    margin: 20px 0;
+
+    p {
+      margin: 10px 0;
+    }
+  }
+
+  .calc-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+    margin-bottom: 15px;
+  }
+
+  .submit-container,
+  .current-temp {
+    margin-top: 20px;
+  }
+
+  .input-container {
+    display: flex;
+    justify-content: center;
+    align-items: end;
 
     label {
-      padding: 0 5px;
+      padding-right: 8px;
     }
 
     input {
       width: 80px;
+      margin-right: 8px;
     }
 
     input,
@@ -36,112 +95,34 @@ const CalculatorStyled = styled.div`
       border: 1px solid #999;
 
       &:focus-visible {
-        outline: 0.5px solid #2070d1;
+        outline: 0.5px solid var(--blue);
       }
     }
 
     input,
-    ul.dropdown {
+    select {
       font-size: 15px;
       height: 28px;
-    }
-
-    /* dropdown */
-    ul.dropdown {
-      outline: none;
-      list-style: none;
-      width: 100%;
-      text-align: left;
-      background-color: white;
-    }
-
-    ul.dropdown li.selected {
-      width: 80px;
-      border: 1px solid #999;
-      padding: 4px 10px;
-
-      &:hover {
-        border: 1px solid #2070d1;
-      }
-    }
-
-    li.selected div {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .arrow-down {
-      width: 0;
-      height: 0;
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 5px solid black;
-    }
-
-    li {
-      display: block;
-      position: relative;
-      text-decoration: none;
-    }
-
-    ul li ul {
-      border: 1px solid #2070d1;
-      background: white;
-      visibility: hidden;
-      opacity: 0;
-      min-width: 5rem;
-      position: absolute;
-      transition: all 0.5s ease;
-      margin-top: 4px;
-      left: -1px;
-      display: none;
-      min-width: 125px;
-
-      li {
-        padding: 4px 10px;
-      }
-      li:hover {
-        background-color: #2070d1;
-        color: white;
-        cursor: pointer;
-      }
-    }
-
-    ul li:hover > ul,
-    ul li:focus-within > ul,
-    ul li ul:hover {
-      visibility: visible;
-      opacity: 1;
-      display: block;
-    }
-
-    ul li ul li {
-      width: 100%;
+      background-color: #fff;
     }
   }
 
   .error-msg {
-    height: 18px;
-    /* padding-top: 10px; */
-    margin-bottom: 10px;
+    height: 14px;
     width: 100%;
     font-size: 14px;
     color: #ff0000;
+    margin-bottom: 14px;
   }
 
   .submit-container {
-    /* padding-bottom: 20px; */
-    /* border-bottom: 1px solid black; */
-    /* padding: 4px 10px; */
-
     button {
       padding: 4px 8px;
       font-size: inherit;
       border-radius: 10px;
-      background-color: #2070d1;
-      color: white;
-      border: 1px solid #999;
+      background-color: var(--blue);
+      color: var(--white);
+      border: none;
       cursor: pointer;
 
       &:disabled {
@@ -152,7 +133,6 @@ const CalculatorStyled = styled.div`
   }
 
   .current-temp {
-    margin: 20px 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -161,9 +141,9 @@ const CalculatorStyled = styled.div`
     &::after {
       position: absolute;
       content: "";
-      width: 15%;
-      border-bottom: 1px solid gray;
-      height: 24px;
+      width: 160px;
+      border-bottom: 1px solid var(--white);
+      height: 20px;
     }
 
     span {
@@ -173,23 +153,63 @@ const CalculatorStyled = styled.div`
   }
 
   .temp-container {
-    border-top: 1px solid black;
+    height: 100%;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 
     .containers {
       width: 100%;
+
+      &:first-child {
+        margin-bottom: 10px;
+      }
+
+      &:last-child {
+        margin-top: 10px;
+      }
     }
   }
 
   .img-break {
-    border-bottom: 1px solid black;
     height: 150px;
     width: 100%;
-    background-image: url(/img/beach.jpg);
+    background-image: url(/img/beach2.jpg);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+  }
+
+  @media only screen and ((max-width: 845px) and (min-width: 620px)) {
+    .input-container {
+      flex-wrap: wrap;
+
+      label {
+        width: 100%;
+        padding-bottom: 10px;
+        padding-right: 0;
+      }
+    }
+  }
+  @media only screen and (max-width: 620px) {
+    display: block;
+
+    .left-section,
+    .right-section {
+      width: 100%;
+    }
+
+    .left-section {
+      border-top-right-radius: 10px;
+    }
+    .right-section {
+      border-top-right-radius: 0;
+      min-height: auto;
+    }
+    .temp-container {
+      min-height: calc((125px * 2) + 150px + 20px);
+    }
   }
 `;
 
