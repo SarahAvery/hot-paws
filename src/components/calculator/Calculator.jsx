@@ -67,7 +67,7 @@ const Calculator = () => {
           <p>Is it too hot out?</p>
           <p>A calculator to determine if a walk may hurt your dogs paws</p>
         </div>
-        <div className="calc-container">
+        <div className="calc-container" data-testid="calc-container">
           <div className="error-msg">{error && `${error}`}</div>
           <div className="input-container">
             <label htmlFor="temperture">Air Temperature:</label>
@@ -75,22 +75,31 @@ const Calculator = () => {
               type="number"
               name="temperture"
               id="temperture"
+              data-testid="temp-input"
               onChange={(e) => onValueChange(e.target.value)}
               required
             />
-            <select name="degree" id="degree" onChange={(e) => onTempChange(e.target.value)}>
-              <option default value="C">
+            <select name="degree" id="degree" data-testid="select" onChange={(e) => onTempChange(e.target.value)}>
+              <option default data-testid="Cel" value="C">
                 &deg;C
               </option>
-              <option value="F">&deg;F</option>
+              <option data-testid="F" value="Fahr">
+                &deg;F
+              </option>
             </select>
           </div>
           <div className="submit-container">
-            <button type="submit" onClick={(e) => onSubmitEvent(e)} disabled={submit} aria-expanded={height !== 0}>
+            <button
+              type="submit"
+              data-testid="button"
+              onClick={(e) => onSubmitEvent(e)}
+              disabled={submit}
+              aria-expanded={height !== 0}
+            >
               Calculate
             </button>
           </div>
-          <div className="current-temp">
+          <div className="current-temp" data-testid="current-temp">
             Current Temp:
             <span>
               {currTemp[0]}&deg;{currTemp[1]}

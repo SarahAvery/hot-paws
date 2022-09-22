@@ -2,7 +2,7 @@ import DisclaimerStyled from "./styles";
 
 const Disclaimer = () => {
   return (
-    <DisclaimerStyled>
+    <DisclaimerStyled data-testid="disclaimer-styled">
       <h2>Disclaimer</h2>
       <ul>
         <li>

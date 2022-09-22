@@ -17,7 +17,7 @@ const pawCalculator = (tempAverage, measurement) => {
     offSet = ((temp - minTemp) * 100) / (maxTemp - minTemp);
   }
 
-  return offSet;
+  return offSet.toFixed(0);
 };
 
 export default pawCalculator;
