@@ -23,7 +23,5 @@ describe("Scale Component", () => {
     const offset = pawCalculator(tempAverage, measurement);
 
     expect(offset).toEqual("23");
-
-    console.log(offset);
   });
 });
