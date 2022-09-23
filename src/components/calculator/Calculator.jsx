@@ -83,7 +83,7 @@ const Calculator = () => {
               <option default data-testid="Cel" value="C">
                 &deg;C
               </option>
-              <option data-testid="F" value="Fahr">
+              <option data-testid="Fahr" value="F">
                 &deg;F
               </option>
             </select>
