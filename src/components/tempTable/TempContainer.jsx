@@ -14,7 +14,6 @@ const TempRow = ({ temp, measurement }) => {
 };
 
 const TempContainer = ({ title, temperature, measurement }) => {
-  console.log(title, temperature, measurement);
   return (
     <TempContainerStyled>
       <h2>{title}</h2>
