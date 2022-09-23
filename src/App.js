@@ -2,6 +2,7 @@ import "./App.css";
 import Calculator from "./components/calculator/Calculator";
 
 function App() {
+  console.log("testing");
   return (
     <div className="App">
       <div className="wrapper">
