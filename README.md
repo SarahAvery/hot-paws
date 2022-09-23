@@ -1,4 +1,4 @@
-https://how-paws.netlify.app/
+https://hot-paws.netlify.app/
 
 ### `npm start`
 
