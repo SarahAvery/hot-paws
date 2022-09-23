@@ -14,6 +14,8 @@ jobs:
       - run: npm build --if-present
       - run: npm test
       - run: npm test:ci
+        env:
+          CI: true
       
       - name: Tests ✅
         if: ${{ success() }}
